@@ -375,7 +375,6 @@ public class VideoRecorder {
         public void run() {
             while (processing.get() || !queue.isEmpty()) {
                 try {
-                    System.out.println("queue size: " + queue.size());
                     if (queue.isEmpty()) {
                         Thread.sleep(100);
                         continue;

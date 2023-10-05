@@ -7,7 +7,7 @@ import com.github.agomezmoron.multimedia.capture.ScreenCapture;
 public class VideoRecorderEventObject extends EventObject {
 	
 	private static final long serialVersionUID = 7841721360521723629L;
-	private ScreenCapture screenCapture;
+	private final ScreenCapture screenCapture;
 	
 	public ScreenCapture getScreenCapture(){
 		return this.screenCapture;

@@ -131,6 +131,8 @@ public class VideoRecorderListener extends TestListenerAdapter {
                 }
             } catch (MalformedURLException e) {
                 LOGGER.error("An error occurred creating the video", e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
         return createdVideoFile;

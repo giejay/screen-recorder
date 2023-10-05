@@ -203,7 +203,6 @@ public class VideoRecorder {
             setRecording(false);
             stopQueueExecutor();
             latch.await(); // wait for the queue of captures to be processed
-            System.out.println("Frames: " + frames.size());
             videoPathString = createVideo();
             if (!VideoRecorderConfiguration.wantToKeepFrames()) {
                 deleteDirectory(

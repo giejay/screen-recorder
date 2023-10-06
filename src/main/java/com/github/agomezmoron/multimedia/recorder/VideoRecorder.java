@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
@@ -195,7 +194,7 @@ public class VideoRecorder {
      *
      * @return a {@link String} with the path where the video was created or null if the video
      * couldn't be created.
-     * @throws MalformedURLException
+     * @throws MalformedURLException a malformed URL has occurred
      */
     public static String stop() throws MalformedURLException, InterruptedException {
         String videoPathString = null;
@@ -246,7 +245,8 @@ public class VideoRecorder {
      * It starts recording (if it wasn't started before).
      *
      * @param newVideoName         with the output of the video.
-     * @param scheduledThreadCount number of threads in newScheduledThreadPool
+     * @param scheduledThreadCount number of threads in newScheduledThreadPool, could be increased to
+     *                             improve performance for debugging purposes
      */
     public static void start(String newVideoName, int scheduledThreadCount) {
         if (!recording) {
@@ -306,22 +306,21 @@ public class VideoRecorder {
      * It deletes recursively a directory.
      *
      * @param directory to be deleted.
-     * @return true if the directory was deleted successfully.
      */
-    private static boolean deleteDirectory(File directory) {
+    private static void deleteDirectory(File directory) {
         if (directory.exists()) {
             File[] files = directory.listFiles();
             if (null != files) {
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].isDirectory()) {
-                        deleteDirectory(files[i]);
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        deleteDirectory(file);
                     } else {
-                        files[i].delete();
+                        file.delete();
                     }
                 }
             }
         }
-        return (directory.delete());
+        directory.delete();
     }
 
     /**
@@ -329,12 +328,12 @@ public class VideoRecorder {
      *
      * @return a {@link String} with the path where the video was created or null if the video
      * couldn't be created.
-     * @throws MalformedURLException
+     * @throws MalformedURLException a malformed URL has occurred
      */
     private static String createVideo() throws MalformedURLException {
         Vector<String> vector = new Vector<String>(frames);
         String videoPathString = null;
-        JpegImagesToMovie jpegImaveToMovie = new JpegImagesToMovie();
+        JpegImagesToMovie jpegImagesToMovie = new JpegImagesToMovie();
         if (!VideoRecorderConfiguration.getVideoDirectory().exists()) {
             VideoRecorderConfiguration.getVideoDirectory().mkdirs();
         }
@@ -350,7 +349,7 @@ public class VideoRecorder {
         if ((oml = JpegImagesToMovie.createMediaLocator(fileURL)) == null) {
             System.exit(0);
         }
-        if (jpegImaveToMovie.doIt(VideoRecorderConfiguration.getWidth(), VideoRecorderConfiguration
+        if (jpegImagesToMovie.doIt(VideoRecorderConfiguration.getWidth(), VideoRecorderConfiguration
             .getHeight(), (1000 / VideoRecorderConfiguration.getCaptureInterval()), vector, oml)) {
             videoPathString = VideoRecorderConfiguration.getVideoDirectory().getAbsolutePath()
                 + File.separatorChar

@@ -3,3 +3,7 @@
 .classpath
 .project
 /.idea
+=======
+.DS_Store
+/video
+*.iml

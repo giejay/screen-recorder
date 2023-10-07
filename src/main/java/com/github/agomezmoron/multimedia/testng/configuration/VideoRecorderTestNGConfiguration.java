@@ -24,6 +24,7 @@
  */
 package com.github.agomezmoron.multimedia.testng.configuration;
 
+import com.github.agomezmoron.multimedia.recorder.VideoRecorder;
 import com.github.agomezmoron.multimedia.recorder.configuration.VideoRecorderConfiguration;
 import com.github.agomezmoron.multimedia.testng.listener.VideoRecorderListener;
 
@@ -90,5 +91,4 @@ public final class VideoRecorderTestNGConfiguration extends VideoRecorderConfigu
     public static void wantToKeepVideoOnFailure(boolean keepVideoOnFailure) {
         VideoRecorderTestNGConfiguration.keepVideoOnFailure = keepVideoOnFailure;
     }
-
 }

@@ -47,6 +47,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.media.MediaLocator;
+import javax.sound.midi.SysexMessage;
 
 /**
  * It models the video recorder.
@@ -90,30 +91,38 @@ public class VideoRecorder {
             + File.separatorChar
             + videoName.replace(".mov", ""));
     private static Thread currentThread;
-
-
+    /**
+     * Threads in the pool to process scheduled task of capturing screenshots.
+     */
+    public static int threadCount = 2;
+    /**
+     * Queue of captures to be processed in another thread
+     */
     private static BlockingQueue<ScreenCapture> queue;
     private static final Runnable task = new Runnable() {
         @Override
         public void run() {
             try {
-                ScreenCapture capture = new ScreenCapture(rt.createScreenCapture(new Rectangle(
-                    VideoRecorderConfiguration.getX(), VideoRecorderConfiguration.getY(),
-                    VideoRecorderConfiguration.getWidth(),
-                    VideoRecorderConfiguration.getHeight())));
+                if(recording) {
+                    ScreenCapture capture = new ScreenCapture(rt.createScreenCapture(new Rectangle(
+                        VideoRecorderConfiguration.getX(), VideoRecorderConfiguration.getY(),
+                        VideoRecorderConfiguration.getWidth(),
+                        VideoRecorderConfiguration.getHeight())));
 
-                VideoRecorderEventObject videoRecorderEvObj = new VideoRecorderEventObject(this,
-                    capture);
+                    VideoRecorderEventObject videoRecorderEvObj = new VideoRecorderEventObject(this,
+                        capture);
 
-                //Exploring all the listeners
-                for (VideoRecorderEventListener vr : listeners) {
-                    //Creating the object that will be sent
-                    vr.frameAdded(videoRecorderEvObj);
+                    //Exploring all the listeners
+                    for (VideoRecorderEventListener vr : listeners) {
+                        //Creating the object that will be sent
+                        vr.frameAdded(videoRecorderEvObj);
+                    }
+
+                    queue.put(
+                        capture); // put capture in queue and proceed IO steps in another thread
                 }
-
-                queue.put(capture); // put capture in queue and proceed IO steps in another thread
             } catch (Exception e) {
-                System.out.println(Arrays.toString(e.getStackTrace()));
+                System.out.println(e.getMessage());
                 setRecording(false);
             }
         }
@@ -131,7 +140,6 @@ public class VideoRecorder {
      * We don't allow to create objects for this class.
      */
     private VideoRecorder() {
-
     }
 
     public static void stopQueueExecutor() {
@@ -199,9 +207,13 @@ public class VideoRecorder {
     public static String stop() throws MalformedURLException, InterruptedException {
         String videoPathString = null;
         if (recording) {
+            System.out.println("stop: set recording to false");
             setRecording(false);
+            System.out.println("stop: stop queue executor");
             stopQueueExecutor();
+            System.out.println("stop: latch.await()");
             latch.await(); // wait for the queue of captures to be processed
+            System.out.println("stop: createVideo()");
             videoPathString = createVideo();
             if (!VideoRecorderConfiguration.wantToKeepFrames()) {
                 deleteDirectory(
@@ -229,7 +241,7 @@ public class VideoRecorder {
             }
 
             // initialize the executor and queue
-            executor = Executors.newScheduledThreadPool(2);
+            executor = Executors.newScheduledThreadPool(getThreadCount());
             queue = new LinkedBlockingQueue<>();
             frames = new ArrayList<>();
             processing = new AtomicBoolean(true);
@@ -239,6 +251,10 @@ public class VideoRecorder {
                 TimeUnit.MILLISECONDS);
             queueExecutor.execute(new CaptureProcessorRunnable());
         }
+    }
+
+    private static int getThreadCount() {
+        return threadCount;
     }
 
     /**

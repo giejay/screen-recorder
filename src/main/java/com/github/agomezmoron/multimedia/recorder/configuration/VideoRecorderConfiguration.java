@@ -24,6 +24,7 @@
  */
 package com.github.agomezmoron.multimedia.recorder.configuration;
 
+import com.github.agomezmoron.multimedia.testng.configuration.VideoRecorderTestNGConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -85,6 +86,12 @@ public class VideoRecorderConfiguration {
      * Video path where the video will be saved.
      */
     private static File videoDirectory = defaultDirectory;
+
+    /**
+     * Set image compression quality, from 0.0f to 1.0f, default value is 0.7f,
+     * this will impact the size of the video.
+     */
+    private static float imageCompressionQuality = 0.7f;
 
     /**
      * @return the width
@@ -265,5 +272,34 @@ public class VideoRecorderConfiguration {
             maxHeight += screenBounds.height;
         }
         return maxHeight;
+    }
+
+    /**
+     * Get image compression quality
+     * @return the imageCompressionQuality
+     */
+    public static float getImageCompressionQuality() {
+        return imageCompressionQuality;
+    }
+
+    /**
+     * Set image compression quality, from 0.0f to 1.0f, default value is 0.7f
+     * @param imageQuality the imageCompressionQuality to set
+     */
+    public static void setImageCompressionQuality(float imageQuality) {
+
+        // Validate imageCompressionQuality, it must be between 0.0f and 1.0f
+        if (imageCompressionQuality < 0.0f || imageCompressionQuality > 1.0f) {
+            throw new IllegalArgumentException("imageCompressionQuality must be between 0.0f and 1.0f");
+        }
+        imageCompressionQuality = imageQuality;
+    }
+
+    /**
+     * Set the number of threads to be used to record the video.
+     * @param  threadsNumber the number of threads in the pool to process scheduled task of capturing screenshots.
+     */
+    public static void setThreadsNumber(int threadsNumber) {
+        VideoRecorder.threadCount = threadsNumber;
     }
 }

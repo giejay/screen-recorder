@@ -374,7 +374,7 @@ public class VideoRecorder {
             while (processing.get() || !queue.isEmpty()) {
                 try {
                     if (queue.isEmpty()) {
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                         continue;
                     }
                     ScreenCapture capture = queue.take();

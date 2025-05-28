@@ -25,7 +25,6 @@ import com.github.agomezmoron.multimedia.external.JpegImagesToMovie;
 import com.github.agomezmoron.multimedia.recorder.configuration.VideoRecorderConfiguration;
 import com.github.agomezmoron.multimedia.recorder.listener.VideoRecorderEventListener;
 import com.github.agomezmoron.multimedia.recorder.listener.VideoRecorderEventObject;
-import com.sun.jna.Platform;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -355,7 +354,7 @@ public class VideoRecorder {
         }
         MediaLocator oml;
         String fileURL;
-        if (Platform.isWindows()) {
+        if (System.getProperty("os.name").contains("Windows")) {
             fileURL = "file://" + VideoRecorderConfiguration.getVideoDirectory().getPath()
                 + File.separatorChar + videoName;
         } else {

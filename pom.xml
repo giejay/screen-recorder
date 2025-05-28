@@ -13,10 +13,8 @@
 
 	<properties>
 		<!-- Versions section (minimum ones) -->
-		<java.version>1.7</java.version>
-		<log4j.version>1.2.17</log4j.version>
+		<java.version>17</java.version>
 		<jmf.version>2.1.1e</jmf.version>
-		<testng.version>6.8.8</testng.version>
 	</properties>
 
 
@@ -45,41 +43,52 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.18.0</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.media</groupId>
 			<artifactId>jmf</artifactId>
 			<version>${jmf.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>[${testng.version},)</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>5.2.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>log4j</groupId>-->
+<!--			<artifactId>log4j</artifactId>-->
+<!--			<version>${log4j.version}</version>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>com.sun.jmx</groupId>-->
+<!--					<artifactId>jmxri</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>com.sun.jdmk</groupId>-->
+<!--					<artifactId>jmxtools</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>javax.jms</groupId>-->
+<!--					<artifactId>jms</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.testng</groupId>-->
+<!--			<artifactId>testng</artifactId>-->
+<!--			<version>[${testng.version},)</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>net.java.dev.jna</groupId>-->
+<!--			<artifactId>jna</artifactId>-->
+<!--			<version>5.2.0</version>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>
@@ -110,7 +119,7 @@
 					<server>github</server>
 				</configuration>
 				<executions>
-					<!-- run site-maven-plugin's 'site' target as part of the build's normal 
+					<!-- run site-maven-plugin's 'site' target as part of the build's normal
 						'deploy' phase -->
 					<execution>
 						<goals>
@@ -122,6 +131,34 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>screen-recorder</id>
+			<name>Java screen recorder library by agomezmoron</name>
+			<url>https://raw.github.com/agomezmoron/screen-recorder/mvn-repo</url>
+		</repository>
+		<repository>
+			<id>P01456-incoming-private</id>
+			<url>https://pkgs.dev.azure.com/INGCDaaS/IngOne/_packaging/P01456-incoming-private/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>P01713-outgoing-maven</id>
+			<url>https://pkgs.dev.azure.com/INGCDaaS/IngOne/_packaging/P01713-outgoing-maven/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 
 </project>

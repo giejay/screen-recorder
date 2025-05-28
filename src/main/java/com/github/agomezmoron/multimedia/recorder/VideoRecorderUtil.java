@@ -20,17 +20,15 @@
  */
 package com.github.agomezmoron.multimedia.recorder;
 
-import static com.github.agomezmoron.multimedia.testng.configuration.VideoRecorderTestNGConfiguration.getImageCompressionQuality;
-
-import java.io.File;
-import java.io.IOException;
+import com.github.agomezmoron.multimedia.capture.ScreenCapture;
+import com.github.agomezmoron.multimedia.recorder.configuration.VideoRecorderConfiguration;
 
 import javax.imageio.ImageIO;
-
-import com.github.agomezmoron.multimedia.capture.ScreenCapture;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 class VideoRecorderUtil {
 
@@ -47,7 +45,7 @@ class VideoRecorderUtil {
         // Create the ImageWriteParam to compress the image.
         ImageWriteParam param = writer.getDefaultWriteParam();
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        param.setCompressionQuality(getImageCompressionQuality()); // set compression quality, from 0.0f to 1.0f
+        param.setCompressionQuality(VideoRecorderConfiguration.getImageCompressionQuality()); // set compression quality, from 0.0f to 1.0f
 
         File outputFile = new File(savedPath);
         ImageOutputStream outputStream = ImageIO.createImageOutputStream(outputFile);
